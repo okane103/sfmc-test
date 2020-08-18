@@ -34,7 +34,7 @@
 
       //Converting data from an array of objects, to an array of arrays, starting with the headers
       for (var record in records) {
-        var date = formatDate(records[record][dateField]);
+        var date = records[record][dateField];
         var dataRow = [date]; //forces date value to be first column
 
         for (var field in records[record]) {        //loop through properties/fields in object
@@ -79,11 +79,11 @@
 
     function formatDate(dateString) {
       var date = new Date(dateString);
-      var month = date.getMonth() + 1;
+      var month = date.getMonth();
       var day = date.getDate();
       var year = date.getFullYear();
 
-      return month + '/' + day + '/' + year;
+      return new Date (year, month, day);
     }
   </script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
