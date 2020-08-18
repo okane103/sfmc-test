@@ -127,6 +127,8 @@
         maxValue: new Date(2020, 6, 25)
       }]));
 */
+      console.log(filteredRows(data, new Date(2020, 5, 25), new Date(2020, 6, 25)));
+
       var viewCsv = google.visualization.dataTableToCsv(view);
       console.log(viewCsv);
 
@@ -139,13 +141,25 @@
       chart.draw(view, options);
       return view;
     }
+    // returns array of row indexes
+    function filteredRows(table, minDate, maxDate) {
+      indexes = [];
+      let minTime = minDate.getTime();
+      let maxTime = maxDate.getTime();
+      table.forEach((row, index) => {
+        if (minTime <= row[0].getTime() <= maxTime) {
+          indexes.push(index);
+        }
+      })
+      return indexes;
+    }
   </script>
 </head>
 
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard- 4:19
+      Cash Back Dashboard- 4:26
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
