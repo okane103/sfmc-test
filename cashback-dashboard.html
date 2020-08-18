@@ -88,9 +88,9 @@
   </script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
-
     google.charts.load('current', { 'packages': ['corechart', 'line'] });
     google.charts.setOnLoadCallback(drawChart);
+    VIEW_GLOBAL = drawChart();
 
     function drawChart() {
       var dataArray = %%=v(@data)=%%;
@@ -127,7 +127,6 @@
         maxValue: new Date(2020, 6, 25)
       }]));
 */
-
       var viewCsv = google.visualization.dataTableToCsv(view);
       console.log(viewCsv);
 
@@ -138,6 +137,7 @@
 
       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
       chart.draw(view, options);
+      return view;
     }
   </script>
 </head>
@@ -145,7 +145,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard- 4:13
+      Cash Back Dashboard- 4:15
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
