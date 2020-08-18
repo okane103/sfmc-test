@@ -34,7 +34,7 @@
 
       //Converting data from an array of objects, to an array of arrays, starting with the headers
       for (var record in records) {
-        var date = records[record][dateField];
+        var date = formatDate(records[record][dateField]);
         var dataRow = [date]; //forces date value to be first column
 
         for (var field in records[record]) {        //loop through properties/fields in object
@@ -136,7 +136,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard- 3:11
+      Cash Back Dashboard- 3:15
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
