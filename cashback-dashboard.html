@@ -1,161 +1,163 @@
 <!doctype html>
 <html>
+
 <head>
- <meta charset="utf-8">
- <title></title>
- <meta name="description" content="">
- <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <script runat="server">
-      Platform.Load("Core", "1");
-      try {
-        
-        /* ==== configuration ==== */
-        var recordsDE = DataExtension.Init("7E7046D5-6206-4C71-A52A-414BFC0442B1");
-        
-        var dateField = 'Date';                  //the order of properties in the objects do not follow the order
-                                                      //of fields in SFMC, so the date field needs to be hardcoded to
-                                                      //force it to be the first header/column
-        
-        var excludedFields = ['SSJS_Lookup'];                      //any fields that should be excluded from the final data
-              
-        
-        /* ==== configuration ==== */                
-        
-        var records = recordsDE.Rows.Retrieve();
-        var finalData = [];
-        var headers = [dateField];                    //forces date field to be first header
-        var isFirstRecord = true;
-        var stringData = '';
-  
-        //Converting data from an array of objects, to an array of arrays, starting with the headers
-        for (var record in records) {
-          var date = formatDate(records[record][dateField]);
-          var dataRow = [date]; //forces date value to be first column
-    
-          for (var field in records[record]) {        //loop through properties/fields in object
-            var isExcluded = false;
-            for (var x in excludedFields) {
-             if (field == excludedFields[x]) {
-                 isExcluded = true;
-                }
+    Platform.Load("Core", "1");
+    try {
+
+      /* ==== configuration ==== */
+      var recordsDE = DataExtension.Init("7E7046D5-6206-4C71-A52A-414BFC0442B1");
+
+      var dateField = 'Date';                  //the order of properties in the objects do not follow the order
+                                               //of fields in SFMC, so the date field needs to be hardcoded to
+                                               //force it to be the first header/column
+
+      var excludedFields = ['SSJS_Lookup'];    //any fields that should be excluded from the final data
+
+
+      /* ==== configuration ==== */
+
+      var records = recordsDE.Rows.Retrieve();
+      var finalData = [];
+      var headers = [dateField];                    //forces date field to be first header
+      var isFirstRecord = true;
+      var stringData = '';
+
+      //Converting data from an array of objects, to an array of arrays, starting with the headers
+      for (var record in records) {
+        var date = formatDate(records[record][dateField]);
+        var dataRow = [date]; //forces date value to be first column
+
+        for (var field in records[record]) {        //loop through properties/fields in object
+          var isExcluded = false;
+          for (var x in excludedFields) {
+            if (field == excludedFields[x]) {
+              isExcluded = true;
             }
-            
-            if (isFirstRecord) {
-              if (field != dateField && !isExcluded) {
-                headers.push(field);
-              }
-            }
-            
+          }
+
+          if (isFirstRecord) {
             if (field != dateField && !isExcluded) {
-              var value = records[record][field];
-              if (value.length > 0 && parseInt(value)/1 == value) {
-               value = parseInt(value);
-              } else {
-               value = 0;
-              }
-              dataRow.push(value);  //push the rest of the values as integers
+              headers.push(field);
             }
           }
 
-          if (isFirstRecord == true) {
-            finalData.push(headers);
-            isFirstRecord = false;
+          if (field != dateField && !isExcluded) {
+            var value = records[record][field];
+            if (value.length > 0 && parseInt(value) / 1 == value) {
+              value = parseInt(value);
+            } else {
+              value = 0;
+            }
+            dataRow.push(value);  //push the rest of the values as integers
           }
-
-          finalData.push(dataRow);
         }
-        
-        stringData = Stringify(finalData);
-        Variable.SetValue('@data', stringData);  //passing value to AMPscript to output into frontend JS
-        
-      } catch(e) {
-        Write(Stringify(e));
+
+        if (isFirstRecord == true) {
+          finalData.push(headers);
+          isFirstRecord = false;
+        }
+
+        finalData.push(dataRow);
       }
-      
-      function formatDate(dateString) {
-        var date = new Date(dateString);
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        var year = date.getFullYear();
-        
-        return month + '/' + day + '/' + year;
+
+      stringData = Stringify(finalData);
+      Variable.SetValue('@data', stringData);  //passing value to AMPscript to output into frontend JS
+
+    } catch (e) {
+      Write(Stringify(e));
+    }
+
+    function formatDate(dateString) {
+      var date = new Date(dateString);
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var year = date.getFullYear();
+
+      return month + '/' + day + '/' + year;
+    }
+  </script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+
+    google.charts.load('current', { 'packages': ['corechart', 'line'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var dataArray = %%=v(@data)=%%;
+      var dataHeaders = dataArray.shift();
+      dataArray.forEach(element => element[0] = new Date(element[0]));
+      var data = new google.visualization.DataTable();
+
+      for (var i in dataHeaders) {
+        if (i == 0) {
+          data.addColumn('date', dataHeaders[i]);
+        } else {
+          data.addColumn('number', dataHeaders[i]);
+        }
       }
-    </script>
-   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      
-      google.charts.load('current', {'packages':['corechart', 'line']});
-      google.charts.setOnLoadCallback(drawChart);
-      
-      function drawChart() {
-        var dataArray = %%=v(@data)=%%;
-        var dataHeaders = dataArray.shift();
-        dataArray.forEach(element => element[0] = new Date(element[0]));
-        var data = new google.visualization.DataTable();
-        
-        for (var i in dataHeaders) {
-          if (i == 0) {
-            data.addColumn('date', dataHeaders[i]);
-          } else {
-           data.addColumn('number', dataHeaders[i]);
-          }          
-         }
-        
-        data.addRows(dataArray);
-        
-  var csv = google.visualization.dataTableToCsv(data);
-     console.log(csv);
-        
-        var view = new google.visualization.DataView(data);
-        
-/*        view.setRows(view.getFilteredRows([{
-          column: 1,
-          minValue: '06/25/2020',
-          maxValue: '07/25/2020'
-        }]));
-*/
-        
-        var options = {
-          title: 'CashBack Statistics',
-          legend: { position: 'bottom' }
-        };
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-        chart.draw(view, options);
-      }
-    </script>
+
+      data.addRows(dataArray);
+
+      var csv = google.visualization.dataTableToCsv(data);
+      console.log(csv);
+
+      var view = new google.visualization.DataView(data);
+
+      view.setRows(view.getFilteredRows([{
+        column: 1,
+        minValue: new Date('06/25/2020'),
+        maxValue: new Date('07/25/2020')
+      }]));
+
+      var options = {
+        title: 'CashBack Statistics',
+        legend: { position: 'bottom' }
+      };
+      var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+      chart.draw(view, options);
+    }
+  </script>
 </head>
+
 <body>
-    <div class="container-fluid">
-      <h1>
-        Cash Back Dashboard
-      </h1>
-        <label for="birthday">Start Date:</label>
-        <input type="date" id="startDate" name="startDate" value="2020-06-25">
-        <label for="birthday">End Date:</label>
-        <input type="date" id="endDate" name="endDate" value="2020-07-25">
-        <button type="button" id="go">
-         GO   
-        </button>
-        <div class="row mb-2">
-          <div id="curve_chart" style="width: 900px; height: 500px"></div>  
-        </div>
+  <div class="container-fluid">
+    <h1>
+      Cash Back Dashboard
+    </h1>
+    <label for="birthday">Start Date:</label>
+    <input type="date" id="startDate" name="startDate" value="2020-06-25">
+    <label for="birthday">End Date:</label>
+    <input type="date" id="endDate" name="endDate" value="2020-07-25">
+    <button type="button" id="go">
+      GO
+    </button>
+    <div class="row mb-2">
+      <div id="curve_chart" style="width: 900px; height: 500px"></div>
     </div>
-    <!--/.container-fluid-->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </div>
+  <!--/.container-fluid-->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
     </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
 
 </body>
+
 </html>
