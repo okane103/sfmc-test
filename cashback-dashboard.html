@@ -90,7 +90,6 @@
   <script type="text/javascript">
     google.charts.load('current', { 'packages': ['corechart', 'line'] });
     google.charts.setOnLoadCallback(drawChart);
-    window.VIEW_GLOBAL = drawChart();
 
     function drawChart() {
       var dataArray = %%=v(@data)=%%;
@@ -139,8 +138,9 @@
 
       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
       chart.draw(view, options);
-      return view;
+      VIEW_GLOBAL = view;
     }
+    
     // returns array of row indexes
     function filteredRows(table, minDate, maxDate) {
       indexes = [];
