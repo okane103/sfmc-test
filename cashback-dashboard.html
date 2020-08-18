@@ -52,7 +52,7 @@
             
             if (field != dateField && !isExcluded) {
               var value = records[record][field];
-              if (value.length > 0 && parseInt(value)) {
+              if (value.length > 0 && !isNan(value)) {
                value = parseInt(value);
               } else {
                value = 0;
