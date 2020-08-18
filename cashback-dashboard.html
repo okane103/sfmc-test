@@ -115,8 +115,8 @@
 
       view.setRows(view.getFilteredRows([{
         column: 1,
-        minValue: new Date(2020, 05, 25),
-        maxValue: new Date(2020, 06, 25)
+        minValue: new Date(2020, 5, 25),
+        maxValue: new Date(2020, 6, 25)
       }]));
 
       var viewCsv = google.visualization.dataTableToCsv(view);
@@ -126,7 +126,7 @@
         title: 'CashBack Statistics',
         legend: { position: 'bottom' }
       };
-      
+
       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
       chart.draw(view, options);
     }
