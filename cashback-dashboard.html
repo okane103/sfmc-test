@@ -121,12 +121,13 @@
 
       var view = new google.visualization.DataView(data);
 
-      view.setRows(data.getFilteredRows([{
+ /*     view.setRows(data.getFilteredRows([{
         column: 1,
         minValue: new Date(2020, 5, 25),
         maxValue: new Date(2020, 6, 25)
       }]));
-
+*/
+      
       var viewCsv = google.visualization.dataTableToCsv(view);
       console.log(viewCsv);
 
