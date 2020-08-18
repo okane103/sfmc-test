@@ -95,7 +95,15 @@
     function drawChart() {
       var dataArray = %%=v(@data)=%%;
       var dataHeaders = dataArray.shift();
-      dataArray.forEach(element => element[0] = new Date(element[0].split(','[0],element[0].split(','[1]),element[0].split(','[2]))));
+      
+      dataArray.forEach(element => {
+        var year = parseInt(element[0].split(',')[0]);
+        var month = parseInt(element[0].split(',')[1]);
+        var day = parseInt(element[0].split(',')[2]);
+
+        element[0] = new Date(year,month,day);
+      });
+
       var data = new google.visualization.DataTable();
 
       for (var i in dataHeaders) {
