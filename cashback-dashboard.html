@@ -83,7 +83,7 @@
       var day = date.getDate();
       var year = date.getFullYear();
 
-      return new Date (year, month, day);
+      return year+','+month+','+day;
     }
   </script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -95,7 +95,7 @@
     function drawChart() {
       var dataArray = %%=v(@data)=%%;
       var dataHeaders = dataArray.shift();
-      dataArray.forEach(element => element[0] = new Date(element[0]));
+      dataArray.forEach(element => element[0] = new Date(element[0].split(','[0],element[0].split(','[1]),element[0].split(','[2]))));
       var data = new google.visualization.DataTable();
 
       for (var i in dataHeaders) {
