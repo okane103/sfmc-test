@@ -112,9 +112,6 @@
       console.log(csv);
 
       var view = new google.visualization.DataView(data);
-      
-      var viewCsv = google.visualization.dataTableToCsv(view);
-      console.log(viewCsv);
 
       view.setRows(view.getFilteredRows([{
         column: 1,
@@ -122,10 +119,14 @@
         maxValue: new Date(2020, 06, 25)
       }]));
 
+      var viewCsv = google.visualization.dataTableToCsv(view);
+      console.log(viewCsv);
+
       var options = {
         title: 'CashBack Statistics',
         legend: { position: 'bottom' }
       };
+      
       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
       chart.draw(view, options);
     }
