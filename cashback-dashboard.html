@@ -112,6 +112,9 @@
       console.log(csv);
 
       var view = new google.visualization.DataView(data);
+      
+      var viewCsv = google.visualization.dataTableToCsv(view);
+      console.log(viewCsv);
 
       view.setRows(view.getFilteredRows([{
         column: 1,
@@ -132,7 +135,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard %%=Now()=%%
+      Cash Back Dashboard
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
