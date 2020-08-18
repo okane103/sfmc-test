@@ -121,7 +121,7 @@
 
       var view = new google.visualization.DataView(data);
 
-      view.setRows(view.getFilteredRows([{
+      view.setRows(data.getFilteredRows([{
         column: 1,
         minValue: new Date(2020, 5, 25),
         maxValue: new Date(2020, 6, 25)
@@ -144,7 +144,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard- 3:41
+      Cash Back Dashboard- 3:59
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
