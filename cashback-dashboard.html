@@ -135,7 +135,7 @@
       
       function updateFilter(event) {          //attaches a listener inside scroed context of function so page can trigger a render without exposing the whole object
         view.setRows(event.detail.filter);
-        chart.draw(chart, options);
+        chart.draw(view, options);
       }      
       document.addEventListener('filterGV', updateFilter);
 
@@ -162,7 +162,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard - ts:9:34
+      Cash Back Dashboard - ts:9:39
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
