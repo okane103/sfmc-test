@@ -136,7 +136,7 @@
       G_CHART = {chart, view, options};
 
       function updateFilter(event) {
-        view.setRows(event.filter);
+        view.setRows(event.detail.filter);
       }
       document.addEventListener('filterGV', updateFilter);
     }
@@ -159,7 +159,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard - ts:9:15
+      Cash Back Dashboard - ts:9:22
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
