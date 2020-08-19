@@ -132,13 +132,16 @@
       };
 
       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-      chart.draw(view, options);
+      
+      function updateFilter(event) {          //attaches a listener inside scroed context of function so page can trigger a render without exposing the whole object
+        view.setRows(event.detail.filter);
+        draw(chart, options);
+      }      
+      document.addEventListener('filterGV', updateFilter);
+
       G_CHART = {chart, view, options};
 
-      function updateFilter(event) {
-        view.setRows(event.detail.filter);
-      }
-      document.addEventListener('filterGV', updateFilter);
+      chart.draw(view, options);
     }
 
     // returns array of row indexes
@@ -159,7 +162,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard - ts:9:22
+      Cash Back Dashboard - ts:9:30
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
