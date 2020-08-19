@@ -133,7 +133,7 @@
 
       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
       chart.draw(view, options);
-      VIEW_GLOBAL = view;
+      G_CHART = {chart, view, options};
     }
 
     // returns array of row indexes
@@ -154,7 +154,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard - ts:8:55
+      Cash Back Dashboard - ts:9:00
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
