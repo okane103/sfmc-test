@@ -134,6 +134,11 @@
       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
       chart.draw(view, options);
       G_CHART = {chart, view, options};
+
+      function updateFilter(event) {
+        view.setRows(event.filter);
+      }
+      document.addEventListener('filterGV', updateFilter);
     }
 
     // returns array of row indexes
