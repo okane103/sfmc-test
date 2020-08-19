@@ -100,7 +100,7 @@
         var month = parseInt(element[0].split(',')[1]);
         var day = parseInt(element[0].split(',')[2]);
 
-        element[0] = new Date(year,month,day);                   /* DEV */ console.log(element);
+        element[0] = new Date(year,month,day);                   /* DEV */ console.log(JSON.stringify(element));
       });
 
       dataArray.sort((a, b) => a[0].getTime() - b[0].getTime()); /* DEV */ console.log('Raw Data: \n', JSON.stringify(dataArray, null, 3));
@@ -119,15 +119,12 @@
 
       var view = new google.visualization.DataView(data);
 
- /*     view.setRows(data.getFilteredRows([{
-        column: 1,
-        minValue: new Date(2020, 5, 25),
-        maxValue: new Date(2020, 6, 25)
-      }]));
-*/
-      console.log('Filter Results:\n', filteredRows(dataArray, new Date(2020, 5, 25), new Date(2020, 6, 25)));
+      var dateFilter = filteredRows(dataArray, new Date(2020, 5, 25), new Date(2020, 6, 25));
+      console.log('Filter Results:\n', dateFilter);
 
-      // /* DEV */ var viewCsv = google.visualization.dataTableToCsv(view); console.log(viewCsv);
+      view.setRows(dateFilter);
+
+      /* DEV */ var viewCsv = google.visualization.dataTableToCsv(view); console.log('View Data:\n', viewCsv);
 
       var options = {
         title: 'CashBack Statistics',
@@ -157,7 +154,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard - ts:8:45
+      Cash Back Dashboard - ts:8:55
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
