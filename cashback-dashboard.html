@@ -93,14 +93,14 @@
 
     function drawChart() {
       var dataArray = %%=v(@data)=%%;
-      var dataHeaders = dataArray.shift(); /* DEV */ console.log('Raw Data: \n', JSON.stringify(dataArray, null, 3));
+      var dataHeaders = dataArray.shift(); /* DEV */ ;
 
-      dataArray.forEach(element => {
+      dataArray.forEach(element => {                    
         var year = parseInt(element[0].split(',')[0]);
         var month = parseInt(element[0].split(',')[1]);
         var day = parseInt(element[0].split(',')[2]);
 
-        element[0] = new Date(year,month,day);
+        element[0] = new Date(year,month,day);                   /* DEV */ console.log(element);
       });
 
       dataArray.sort((a, b) => a[0].getTime() - b[0].getTime()); /* DEV */ console.log('Raw Data: \n', JSON.stringify(dataArray, null, 3));
@@ -142,9 +142,9 @@
     // returns array of row indexes
     function filteredRows(table, minDate, maxDate) {
       indexes = [];
-      let minTime = minDate.getTime();
-      let maxTime = maxDate.getTime();
-      table.forEach((row, index) => {
+      let minTime = minDate.getTime();                 
+      let maxTime = maxDate.getTime();                   
+      table.forEach((row, index) => {                    /* DEV */ console.log('min: ', '\nthis: ', row[0].getTime(), minTime, '\nmax: ', maxTime)
         if (minTime <= row[0].getTime() <= maxTime) {
           indexes.push(index);
         }
@@ -157,7 +157,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard - 8:29
+      Cash Back Dashboard - 8:39
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
