@@ -1,0 +1,178 @@
+<!-- Server Side -->
+<script runat="server">
+    Platform.Load("Core", "1");
+    try {
+
+        /* ==== configuration ==== */
+        var recordsDE = DataExtension.Init("7E7046D5-6206-4C71-A52A-414BFC0442B1");
+
+        var dateField = 'Date';                  //the order of properties in the objects do not follow the order
+        //of fields in SFMC, so the date field needs to be hardcoded to
+        //force it to be the first header/column
+
+        var excludedFields = ['SSJS_Lookup'];    //any fields that should be excluded from the final data
+
+        var records = recordsDE.Rows.Retrieve();
+        var finalData = [];
+        var headers = [dateField];                    //forces date field to be first header
+        var isFirstRecord = true;
+        var stringData = '';
+
+        //Converting data from an array of objects, to an array of arrays, starting with the headers
+        for (var record in records) {
+            var date = formatDate(records[record][dateField]);
+            var dataRow = [date]; //forces date value to be first column
+
+            for (var field in records[record]) {        //loop through properties/fields in object
+                var isExcluded = false;
+                for (var x in excludedFields) {
+                    if (field == excludedFields[x]) {
+                        isExcluded = true;
+                    }
+                }
+
+                if (isFirstRecord) {
+                    if (field != dateField && !isExcluded) {
+                        headers.push(field);
+                    }
+                }
+
+                if (field != dateField && !isExcluded) {
+                    var value = records[record][field];
+                    if (value.length > 0 && parseInt(value) / 1 == value) {
+                        value = parseInt(value);
+                    } else {
+                        value = 0;
+                    }
+                    dataRow.push(value);  //push the rest of the values as integers
+                }
+            }
+
+            if (isFirstRecord == true) {
+                finalData.push(headers);
+                isFirstRecord = false;
+            }
+
+            finalData.push(dataRow);
+        }
+
+        stringData = Stringify(finalData);
+        Variable.SetValue('@data', stringData);  //passing value to AMPscript to output into frontend JS
+
+    } catch (e) {
+        Write(Stringify(e));
+    }
+
+    function formatDate(dateString) {
+        var date = new Date(dateString);
+        var month = date.getMonth();
+        var day = date.getDate();
+        var year = date.getFullYear();
+
+        return year + ',' + month + ',' + day;
+    }
+</script>
+<!-- /Server Side -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SFMC Reporting Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+</head>
+
+<body>
+    <h1>Hello, world!</h1>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        const createDashboard = () => {
+            // holds underlying data for dashboard
+            const gvState = {};
+            
+            class Chart {
+                // private class fields
+                #targetElement;
+                #chart;
+
+                // private class methods
+                get #chart() {
+                    return this.#chart;
+                }
+
+                set #chart(chart) {
+                    this.#chart = chart;
+                }
+
+                // class constructor
+                constructor(element, data, options) {
+                    this.#targetElement = element;
+                    this.#chart = options.chart;
+                    /* ---------------------- */
+                    this.table = new google.visualization.DataTable();
+                    this.options = options || {};
+                    this.data = data;
+                    this.view;
+                }
+
+                // public class methods
+                draw() {
+                    this.#chart.draw
+                }
+
+                // public getters and setters
+                get data() {
+                    return this.data;
+                }
+
+                get table() {
+                    return this.table;
+                }
+
+                get view() {
+                    return this.view;
+                }
+
+                get options() {
+                    return this.options;
+                }
+
+                set data(newData) {
+                    this.data = newData
+                }
+
+                set table(newTable) {
+                    this.table = newTable;
+                }
+
+                set view(newView) {
+                    this.view = newView;
+                }
+
+                set options(newOptions) {
+                    for (const [key, value] of Object.entries(newOptions)) {
+                        this.options.key = value;
+                    }
+                }
+            }
+
+            const init = () => {
+                
+            }
+
+            let processArrayFromSSJS(%%= v(@data)=%%);
+
+        }
+        google.charts.load('current', { 'packages': ['corechart', 'line'] });
+        google.charts.setOnLoadCallback(createDashboard);
+    </script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
