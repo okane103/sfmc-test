@@ -91,7 +91,7 @@
     google.charts.load('current', { 'packages': ['corechart', 'line'] });
     google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
+    function drawChart() { //this functions wraps the whole google charts setup and fires on succesful load of chart packages, needs refactored 
       var dataArray = %%=v(@data)=%%;
       var dataHeaders = dataArray.shift(); /* DEV */ ;
 
@@ -127,19 +127,21 @@
       /* DEV */ var viewCsv = google.visualization.dataTableToCsv(view); console.log('View Data:\n', viewCsv);
 
       var options = {
-        title: 'CashBack Statistics',
+        title: 'Campaign Metrics',
         legend: { position: 'bottom' }
       };
 
       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
       
-      function updateFilter(event) {          //attaches a listener inside scroed context of function so page can trigger a render without exposing the whole object
+      function updateFilter(event) {
+        view = new google.visualization.DataView(data)      
         view.setRows(event.detail.filter);
         chart.draw(view, options);
-      }      
-      document.addEventListener('filterGV', updateFilter);
+      }
 
-      G_CHART = {chart, view, options};
+      document.addEventListener('filterGVRows', updateFilter);//closure attatches custom event listener to doc from inside scoped context of google vis api's 'on-load' callback
+
+      G_CHART = {chart, view, options}; 
 
       chart.draw(view, options);
     }
@@ -162,7 +164,7 @@
 <body>
   <div class="container-fluid">
     <h1>
-      Cash Back Dashboard - ts:9:39
+      Cash Back Dashboard - ts:9:35a
     </h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
