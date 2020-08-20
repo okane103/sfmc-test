@@ -88,7 +88,7 @@
 </head>
 
 <body>
-    <h1>Cashback campaign 1:40am</h1>
+    <h1>Cashback campaign 1:43am</h1>
     <div class="row mb-2">
         <div id="line_chart" style="width: 900px; height: 500px"></div>
     </div>
@@ -199,9 +199,9 @@
             }
             for (var i in headers) {
                 if (i == 0) {
-                    data.addColumn('date', dataHeaders[i]);
+                    data.addColumn('date', headers[i]);
                 } else {
-                    data.addColumn('number', dataHeaders[i]);
+                    data.addColumn('number', headers[i]);
                 }
             }
             let table = new google.visualization.DataTable();
