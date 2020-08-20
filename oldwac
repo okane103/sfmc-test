@@ -1,0 +1,5 @@
+&mi_ecmp=%%=Substring(emailname_,1,40)=%%&mi_u=%%_subscriberkey%%
+
+
+
+utm_source=%%=IIf(Empty(@utm_src),'email',@utm_src)=%%&utm_medium=email&utm_kxconfid=so3yexmpm&utm_campaign=%%=Substring(emailname_,1,40)=%%&REFID=%%=Substring(emailname_,1,40)=%%&utm_content=%%=V(@contentArea)=%%&utm_term=%%linkname%%&SubKey=%%_subscriberkey%%&j=%%jobid%%&sfmc_sub=%%SubscriberID%%&list=%%List_%%&u=%%JobURLID%%&mid=%%MemberID%%&jb=%%_JobSubscriberBatchID%%
