@@ -88,91 +88,129 @@
 </head>
 
 <body>
-    <h1>Hello, world!</h1>
+    <h1>Cashback campaign 11:17am</h1>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        const createDashboard = () => {
-            // holds underlying data for dashboard
-            const gvState = {};
-            
-            class Chart {
-                // private class fields
-                #targetElement;
-                #chart;
+        /* Custom class definitions wrap business
+           logic around google.visualization API */
+        class Chart {
+            // private fields
+            #props;
+            #chart;
+            #table;
+            #view;
 
-                // private class methods
-                get #chart() {
-                    return this.#chart;
-                }
+            constructor(props) {
+                this.#props = props;
+                this.#table = new google.visualization.DataTable(props.data);
+                this.#view = new google.visualization.DataView(this.#table);
+                this.#chart = new google.visualization[props.chartType](
+                    document.getElementById(props.elementId)
+                );
+            }
 
-                set #chart(chart) {
-                    this.#chart = chart;
-                }
-
-                // class constructor
-                constructor(element, data, options) {
-                    this.#targetElement = element;
-                    this.#chart = options.chart;
-                    /* ---------------------- */
-                    this.table = new google.visualization.DataTable();
-                    this.options = options || {};
-                    this.data = data;
-                    this.view;
-                }
-
-                // public class methods
-                draw() {
-                    this.#chart.draw
-                }
-
-                // public getters and setters
-                get data() {
-                    return this.data;
-                }
-
-                get table() {
-                    return this.table;
-                }
-
-                get view() {
-                    return this.view;
-                }
-
-                get options() {
-                    return this.options;
-                }
-
-                set data(newData) {
-                    this.data = newData
-                }
-
-                set table(newTable) {
-                    this.table = newTable;
-                }
-
-                set view(newView) {
-                    this.view = newView;
-                }
-
-                set options(newOptions) {
-                    for (const [key, value] of Object.entries(newOptions)) {
-                        this.options.key = value;
-                    }
+            /* public methods */
+            draw(filterArr) {
+                if (filterArr && filterArr.length) {
+                    this.filterAndDraw(filterArr);
+                } else {
+                    this.#chart.draw(
+                        this.#view,
+                        this.#props.options
+                    );
                 }
             }
 
-            const init = () => {
-                
+            get data() {
+                return this.#props.data;
             }
 
-            let processArrayFromSSJS(%%= v(@data)=%%);
+            get table() {
+                return this.#table;
+            }
+
+           filterAndDraw(newFilter) {
+                this.#view = new google.visualization.DataView(this.#table);
+                this.#view.setRows(newFilter);
+                this.draw();
+            }
+
+            set options(newOptions) {
+                for (const [key, value] of Object.entries(newOptions)) {
+                    this.#props.options[key] = value;
+                }
+            }
+
+            static injest(array) {
+                const headers = array.shift();
+
+                array.forEach(el => {
+                    var year = parseInt(el[0].split(',')[0]);
+                    var month = parseInt(el[0].split(',')[1]);
+                    var day = parseInt(el[0].split(',')[2]);
+                    el[0] = new Date(year, month, day);
+                });
+
+                array.sort((a, b) => {
+                    a[0].getTime() - b[0].getTime();
+                });
+
+                headers.forEach((header, col) => {
+                    header = {
+                        type: col == 0 ? 'date' : 'number', // first col is date
+                        value: header
+                    };
+                });
+                return { headers, array }; // returns js arrays, to be used
+                                           // for the 'new DataTable()' call
+                                           // within the Chart class constructor
+            }
+
+
+            static createDateFilter(array, minDateObj, maxDateObj) { //this function is expecting two Date objects 
+                                                                     // and the 'cleaned' array returned from Chart.injest()
+                const minTimeString = minDateObj.getTime();
+                const maxTimeString = maxDateObj.getTime();
+                const filterResults = [];
+
+                if (minTimeString && maxTimeString) {
+
+                }
+            }
+        }
+
+        // event handelers
+        const onPageReady = () => {
+            this.google.charts.load('current', { 'packages': ['corechart', 'line'] });
+            this.google.charts.setOnLoadCallback(initializeMainChart);
+        }
+
+        const initializeMainChart = () => {
+            let cleanArrays = Chart.injest(%%=v(@data)=%%);
+            let options = {
+                title: 'General Campaign Metrics',
+                legend: { position: 'bottom' }
+            }
+            let props = {
+                data: cleanData,
+                options: options,
+                elementId: '#curve_chart',
+                chartType: 'LineChart'
+            }
 
         }
-        google.charts.load('current', { 'packages': ['corechart', 'line'] });
-        google.charts.setOnLoadCallback(createDashboard);
     </script>
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+        </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+        </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+        </script>
 </body>
 
 </html>
