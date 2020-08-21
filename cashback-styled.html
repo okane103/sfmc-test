@@ -191,6 +191,7 @@
         }
 
         const createTable = (cleanData) => {
+            let table = new google.visualization.DataTable();
             let headers = cleanData.headers;
             let data = cleanData.array;
             let options = {
@@ -199,12 +200,11 @@
             }
             for (var i in headers) {
                 if (i == 0) {
-                    data.addColumn('date', headers[i]);
+                    table.addColumn('date', headers[i]);
                 } else {
-                    data.addColumn('number', headers[i]);
+                    table.addColumn('number', headers[i]);
                 }
             }
-            let table = new google.visualization.DataTable();
 
             return {
                 data: data,
@@ -243,7 +243,6 @@
         </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-        </script>
+    </script>
 </body>
-
 </html>
