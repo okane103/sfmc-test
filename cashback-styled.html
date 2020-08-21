@@ -192,13 +192,16 @@
         }
 
         const createTable = (cleanData) => {
-            let table = new google.visualization.DataTable();
             let headers = cleanData.headers;
             let data = cleanData.array;
+
             let options = {
                 title: 'General Campaign Metrics',
                 legend: { position: 'bottom' }
             }
+
+            let table = new google.visualization.DataTable();
+
             for (var i in headers) {
                 if (i == 0) {
                     table.addColumn('date', headers[i]);
@@ -206,6 +209,9 @@
                     table.addColumn('number', headers[i]);
                 }
             }
+            
+            data.sort((a, b) => a[0].getTime() - b[0].getTime());
+            table.addRows(data);
 
             return {
                 data: data,
