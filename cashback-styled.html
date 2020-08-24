@@ -88,7 +88,7 @@
 </head>
 
 <body>
-    <h1>Cashback campaign 9:49am</h1>
+    <h1>Cashback campaign 12:00pm</h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
     <label for="birthday">End Date:</label>
@@ -260,7 +260,7 @@
             console.log(err);
         }
 
-        const createSumTable = (chart) => {
+        function createSumTable(chart) {
             let dataSum = [['Metric', 'Total over Data Range']];
             chart.headers.shift();
             chart.headers.forEach((header, colIndex) => {
@@ -283,33 +283,6 @@
             })
 
             var sumTableArray = dataSum;
-            var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
-            var sumTable = new google.visualization.Table(document.getElementById('table_div'));
-
-            sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
-            return sumTable;
-        }
-
-        const createSumTable2 = (chart) => {
-            let dataSum = [];
-            chart.headers.shift();
-            chart.data.forEach((row, rowIndex) => {
-                row.shift();
-                chart.headers.forEach((header, colIndex) => {
-                    if (colIndex == 0) {
-                        dataSum[colIndex] = ' ';
-                    } else {
-                        dataSum[colIndex] = dataSum[colIndex] ? dataSum[colIndex] + row[colIndex] || 0 : row[colIndex] || 0;
-                    }
-                })
-            })
-            dataSum.forEach((col, index) => {
-                if (3 < index < 7) {
-                    col = col / chart.data.length;
-                }
-            })
-
-            var sumTableArray = [chart.headers, dataSum];
             var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
             var sumTable = new google.visualization.Table(document.getElementById('table_div'));
 
