@@ -262,17 +262,14 @@
 
         const createSumTable = (chart) => {
             let dataSum = [];
-            chart.headers.shift();
             chart.data.forEach((row, rowIndex) => {
                 row.shift();
                 chart.headers.forEach((header, colIndex) => {
                     if (colIndex == 0) {
                         dataSum[0] = ['Metric', 'Total over Date Range'];
                     } else {
-                        if (dataSum[colIndex]) {
-                            dataSum[colIndex][0] = header;
-                            dataSum[colIndex][1] = dataSum[colIndex][1] ? dataSum[colIndex][1] + row[colIndex] || 0 : row[colIndex] || 0;
-                        }
+                        dataSum[colIndex][0] = header;
+                        dataSum[colIndex][1] = dataSum[colIndex][1] ? dataSum[colIndex][1] + row[colIndex] || 0 : row[colIndex] || 0;
                     }
                 })
             })
