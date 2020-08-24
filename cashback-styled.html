@@ -267,10 +267,11 @@
                 row.shift();
                 chart.headers.forEach((header, colIndex) => {
                     if (colIndex == 0) {
-                        dataSum[colIndex] = ['Metric', 'Total over Date Range'];
+                        dataSum[0] = ['Metric', 'Total over Date Range'];
                     } else {
                         if (dataSum[colIndex]) {
-                            dataSum[colIndex] = [header, dataSum[colIndex][1] ? dataSum[colIndex][1] + row[colIndex] || 0 : row[colIndex] || 0];
+                            dataSum[colIndex][0] = header;
+                            dataSum[colIndex][1] = dataSum[colIndex][1] ? dataSum[colIndex][1] + row[colIndex] || 0 : row[colIndex] || 0;
                         }
                     }
                 })
@@ -281,7 +282,7 @@
                 }
             })
 
-            var sumTableArray = [chart.headers, dataSum];
+            var sumTableArray = dataSum;
             var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
             var sumTable = new google.visualization.Table(document.getElementById('table_div'));
 
