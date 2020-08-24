@@ -88,7 +88,7 @@
 </head>
 
 <body>
-    <h1>Cashback campaign 7:42pm</h1>
+    <h1>Cashback campaign 7:09am</h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
     <label for="birthday">End Date:</label>
@@ -234,17 +234,24 @@
         const createChart = (props) => {
             return new Chart(props);
         }
-
+        
+        const createChartListeners = (chart) => {
+            $('#datePickerSubmit').click(function() {
+                let minDate = new Date($('#startDate').val());
+                let maxDate = new Date($('#maxDate').val());
+                chart.filterByDate(minDate, maxDate);
+            })
+        }
+        
         const onError = (err) => {
             console.log(err);
-        };
-
-        $('')
+        }
 
         google.charts.load('current', { 'packages': ['corechart', 'line'] })
             .then(initializeData)
             .then(createTable)
             .then(createChart)
+            .then(createChartListeners)
             .catch(onError)
 
     </script>
