@@ -262,8 +262,9 @@
 
         const createSumTable = (chart) => {
             let dataSum = [];
-            
+            headers.shift();
             chart.data.forEach((row, rowIndex) => {
+                row.shift();
                 chart.headers.forEach((header, colIndex) => {
                     if (colIndex == 0) {
                         dataSum[colIndex] = ' ';
