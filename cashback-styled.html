@@ -120,6 +120,7 @@
             #chart;
             #table;
             #view;
+            #summary;
 
             constructor(props) {
                 this.#props = props;
@@ -138,9 +139,14 @@
                 } else {
                     this.#chart.draw(
                         this.#view,
-                        this.#props.options
+                        this.#props.options                        
                     );
+                    this.#summary.draw(this.#view, { sumDataTable: false, width: '100%', height: '100%' })
                 }
+            }
+
+            set summaryChart(summaryChart) {
+                this.#summary = summaryChart;
             }
 
             get data() {
@@ -284,10 +290,16 @@
 
             var sumTableArray = dataSum;
             var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
-            var sumTable = new google.visualization.Table(document.getElementById('table_div'));
+            if (!sumTable) var sumTable = new google.visualization.Table(document.getElementById('table_div'));
 
             sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
+            chart.summaryChart = sumTable;
             return sumTable;
+        }
+
+        function updateSumTable(view) {
+            var sumTable = new google.visualization.Table(document.getElementById('table_div'));
+            sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' });
         }
 
         google.charts.load('current', { 'packages': ['corechart', 'line', 'table'] })
