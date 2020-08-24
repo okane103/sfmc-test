@@ -175,13 +175,12 @@
           class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">Dashboard</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group mr-2">
-              <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-              <span data-feather="calendar"></span>
-
+            <label for="birthday">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" value="2020-06-25">
+            <label for="birthday">End Date:</label>
+            <input type="date" id="endDate" name="endDate" value="2020-07-25">
+            <button type="button" id="datePickerSubmit">
+                GO
             </button>
           </div>
         </div>
