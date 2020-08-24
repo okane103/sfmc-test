@@ -88,7 +88,7 @@
 </head>
 
 <body>
-    <h1>Cashback campaign 7:25am</h1>
+    <h1>Cashback campaign 7:37m</h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
     <label for="birthday">End Date:</label>
@@ -99,6 +99,13 @@
     <div class="row mb-2">
         <div id="line_chart" style="width: 900px; height: 500px"></div>
     </div>
+    <table>
+        <tr>
+            <th>
+                
+            </th>
+        </tr>
+    </table>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -159,7 +166,7 @@
                         filterResults.push(index);
                     }
                 })
-                filterAndDraw(filterResults);
+                this.filterAndDraw(filterResults);
             }
 
             set options(newOptions) {
@@ -259,8 +266,14 @@
             .then(createTable)
             .then(createChart)
             .then(createChartListeners)
+            .then(addOtherComponents)
             .catch(onError)
 
+        //hoisted functions until these parts can be refactored
+        function showSumPanel(data) {
+
+        }
+    
     </script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
