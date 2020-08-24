@@ -89,13 +89,6 @@
 
 <body>
     <h1>Cashback campaign 7:42pm</h1>
-    <label for="birthday">Start Date:</label>
-    <input type="date" id="startDate" name="startDate" value="2020-06-25">
-    <label for="birthday">End Date:</label>
-    <input type="date" id="endDate" name="endDate" value="2020-07-25">
-    <button type="button" id="go" onclick="updateDashboard()">
-      GO
-    </button>
     <div class="row mb-2">
         <div id="line_chart" style="width: 900px; height: 500px"></div>
     </div>
@@ -106,7 +99,7 @@
     <script type="text/javascript">
         /* Custom class definitions wrap business
            logic around google.visualization API */
-        class Chart {
+        class Dashboard {
             // private fields
             #props;
             #chart;
@@ -149,19 +142,6 @@
                 this.draw();
             }
 
-            filterByDate(minDateObj, maxDateObj) {            
-                const minTime = minDateObj.getTime();
-                const maxTime = maxDateObj.getTime();
-                const filterResults = [];
-                array.forEach((row, index) => {                   
-                    console.log('min: ', minTime, '\nthis: ', row[0].getTime(), '\nmax: ', maxTime)
-                    if (minTime < row[0].getTime() && maxTime > row[0].getTime()) {
-                        filterResults.push(index);
-                    }
-                })
-                filterAndDraw(filterResults);
-            }
-
             set options(newOptions) {
                 for (const [key, value] of Object.entries(newOptions)) {
                     this.#props.options[key] = value;
@@ -191,6 +171,18 @@
                 return { headers, array }; // returns js arrays, to be used
                 // for the 'new DataTable()' call
                 // within the Chart class constructor
+            }
+
+
+            static createDateFilter(array, minDateObj, maxDateObj) { //this function is expecting two Date objects 
+                // and the 'cleaned' array returned from Chart.injest()
+                const minTimeString = minDateObj.getTime();
+                const maxTimeString = maxDateObj.getTime();
+                const filterResults = [];
+
+                if (minTimeString && maxTimeString) {
+
+                }
             }
         }
 
@@ -238,8 +230,6 @@
         const onError = (err) => {
             console.log(err);
         };
-
-        $('')
 
         google.charts.load('current', { 'packages': ['corechart', 'line'] })
             .then(initializeData)
