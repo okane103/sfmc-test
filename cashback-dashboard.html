@@ -1,193 +1,435 @@
+<!-- Server Side -->
+<script runat="server">
+  Platform.Load("Core", "1");
+  try {
+
+    /* ==== configuration ==== */
+    var recordsDE = DataExtension.Init("7E7046D5-6206-4C71-A52A-414BFC0442B1");
+
+    var dateField = 'Date';                  //the order of properties in the objects do not follow the order
+    //of fields in SFMC, so the date field needs to be hardcoded to
+    //force it to be the first header/column
+
+    var excludedFields = ['SSJS_Lookup'];    //any fields that should be excluded from the final data
+
+    var records = recordsDE.Rows.Retrieve();
+    var finalData = [];
+    var headers = [dateField];                    //forces date field to be first header
+    var isFirstRecord = true;
+    var stringData = '';
+
+    //Converting data from an array of objects, to an array of arrays, starting with the headers
+    for (var record in records) {
+      var date = formatDate(records[record][dateField]);
+      var dataRow = [date]; //forces date value to be first column
+
+      for (var field in records[record]) {        //loop through properties/fields in object
+        var isExcluded = false;
+        for (var x in excludedFields) {
+          if (field == excludedFields[x]) {
+            isExcluded = true;
+          }
+        }
+
+        if (isFirstRecord) {
+          if (field != dateField && !isExcluded) {
+            headers.push(field);
+          }
+        }
+
+        if (field != dateField && !isExcluded) {
+          var value = records[record][field];
+          if (value.length > 0 && parseInt(value) / 1 == value) {
+            value = parseInt(value);
+          } else {
+            value = 0;
+          }
+          dataRow.push(value);  //push the rest of the values as integers
+        }
+      }
+
+      if (isFirstRecord == true) {
+        finalData.push(headers);
+        isFirstRecord = false;
+      }
+
+      finalData.push(dataRow);
+    }
+
+    stringData = Stringify(finalData);
+    Variable.SetValue('@data', stringData);  //passing value to AMPscript to output into frontend JS
+
+  } catch (e) {
+    Write(Stringify(e));
+  }
+
+  function formatDate(dateString) {
+    var date = new Date(dateString);
+    var month = date.getMonth();
+    var day = date.getDate();
+    var year = date.getFullYear();
+
+    return year + ',' + month + ',' + day;
+  }
+</script>
+<!-- /Server Side -->
+
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Jekyll v4.1.1">
+  <title>Reporting Dashboard</title>
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
+
+  <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-  <script runat="server">
-    Platform.Load("Core", "1");
-    try {
 
-      /* ==== configuration ==== */
-      var recordsDE = DataExtension.Init("7E7046D5-6206-4C71-A52A-414BFC0442B1");
+  <!-- Favicons -->
+  <!--
+    <link rel="apple-touch-icon" href="/docs/4.5/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/4.5/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/4.5/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
+    <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon.ico">
+    <meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#563d7c">
+    -->
 
-      var dateField = 'Date';                  //the order of properties in the objects do not follow the order
-      //of fields in SFMC, so the date field needs to be hardcoded to
-      //force it to be the first header/column
-
-      var excludedFields = ['SSJS_Lookup'];    //any fields that should be excluded from the final data
-
-
-      /* ==== configuration ==== */
-
-      var records = recordsDE.Rows.Retrieve();
-      var finalData = [];
-      var headers = [dateField];                    //forces date field to be first header
-      var isFirstRecord = true;
-      var stringData = '';
-
-      //Converting data from an array of objects, to an array of arrays, starting with the headers
-      for (var record in records) {
-        var date = formatDate(records[record][dateField]);
-        var dataRow = [date]; //forces date value to be first column
-
-        for (var field in records[record]) {        //loop through properties/fields in object
-          var isExcluded = false;
-          for (var x in excludedFields) {
-            if (field == excludedFields[x]) {
-              isExcluded = true;
-            }
-          }
-
-          if (isFirstRecord) {
-            if (field != dateField && !isExcluded) {
-              headers.push(field);
-            }
-          }
-
-          if (field != dateField && !isExcluded) {
-            var value = records[record][field];
-            if (value.length > 0 && parseInt(value) / 1 == value) {
-              value = parseInt(value);
-            } else {
-              value = 0;
-            }
-            dataRow.push(value);  //push the rest of the values as integers
-          }
-        }
-
-        if (isFirstRecord == true) {
-          finalData.push(headers);
-          isFirstRecord = false;
-        }
-
-        finalData.push(dataRow);
-      }
-
-      stringData = Stringify(finalData);
-      Variable.SetValue('@data', stringData);  //passing value to AMPscript to output into frontend JS
-
-    } catch (e) {
-      Write(Stringify(e));
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
-    function formatDate(dateString) {
-      var date = new Date(dateString);
-      var month = date.getMonth();
-      var day = date.getDate();
-      var year = date.getFullYear();
-
-      return year + ',' + month + ',' + day;
-    }
-  </script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
-    google.charts.load('current', { 'packages': ['corechart', 'line'] });
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() { //this functions wraps the whole google charts setup and fires on succesful load of chart packages, needs refactored 
-      var dataArray = %%=v(@data)=%%;
-      var dataHeaders = dataArray.shift(); /* DEV */;
-
-      dataArray.forEach(element => {
-        var year = parseInt(element[0].split(',')[0]);
-        var month = parseInt(element[0].split(',')[1]);
-        var day = parseInt(element[0].split(',')[2]);
-
-        element[0] = new Date(year, month, day);                   /* DEV */ console.log(JSON.stringify(element));
-      });
-
-      dataArray.sort((a, b) => a[0].getTime() - b[0].getTime()); /* DEV */ console.log('Raw Data: \n', JSON.stringify(dataArray, null, 3));
-
-      var data = new google.visualization.DataTable();
-
-      for (var i in dataHeaders) {
-        if (i == 0) {
-          data.addColumn('date', dataHeaders[i]);
-        } else {
-          data.addColumn('number', dataHeaders[i]);
-        }
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
       }
-
-      data.addRows(dataArray);                                  /* DEV */ var csv = google.visualization.dataTableToCsv(data); console.log(csv);
-
-      var view = new google.visualization.DataView(data);
-
-      var dateFilter = filteredRows(dataArray, new Date(2020, 5, 25), new Date(2020, 6, 25));
-      console.log('Filter Results:\n', dateFilter);
-
-      view.setRows(dateFilter);
-
-      /* DEV */ var viewCsv = google.visualization.dataTableToCsv(view); console.log('View Data:\n', viewCsv);
-
-      var options = {
-        title: 'Campaign Metrics',
-        legend: { position: 'bottom' }
-      };
-
-      var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-      function updateFilter(newFilter) {
-        view = new google.visualization.DataView(data)
-        view.setRows(newFilter);
-        chart.draw(view, options);
-      }
-
-      function handleUpdateEvent() {
-        updateFilter(event.detail.filter);
-      }
-
-      document.addEventListener('filterGVRows', handleUpdateEvent);//closure attatches custom event listener to doc from inside scoped context of google vis api's 'on-load' callback
-
-      G_CHART = { chart, view, options };
-
-      chart.draw(view, options);
     }
-
-    // returns array of row indexes
-    function filteredRows(table, minDate, maxDate) {
-      indexes = [];
-      let minTime = minDate.getTime();
-      let maxTime = maxDate.getTime();
-      table.forEach((row, index) => {                    /* DEV */ console.log('min: ', minTime, '\nthis: ', row[0].getTime(), '\nmax: ', maxTime)
-        if (minTime < row[0].getTime() && maxTime > row[0].getTime()) {
-          indexes.push(index);
-        }
-      })
-
-      return indexes;
-
-
-    }
-  </script>
+  </style>
+  <!-- Custom styles for this template -->
+  <link href="https://cloud.emails.skechers.com/dashboard_style.css" rel="stylesheet">
 </head>
 
 <body>
-  <div class="container-fluid">
-    <h1>
-      Cash Back Dashboard - ts:9:35a
-    </h1>
-    <label for="birthday">Start Date:</label>
-    <input type="date" id="startDate" name="startDate" value="2020-06-25">
-    <label for="birthday">End Date:</label>
-    <input type="date" id="endDate" name="endDate" value="2020-07-25">
-    <button type="button" id="go" onclick="updateDashboard()">
-      GO
+  <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Skechers, Inc.</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
+      data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="row mb-2">
-      <div id="curve_chart" style="width: 900px; height: 500px"></div>
+    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    <ul class="navbar-nav px-3">
+      <li class="nav-item text-nowrap">
+        <a class="nav-link" href="#">Sign out</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="sidebar-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                <span data-feather="home"></span>
+                Dashboard <span class="sr-only">(current)</span>
+              </a>
+            </li>
+          </ul>
+
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Reporting Dashboards</span>
+            <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+              <span data-feather="plus-circle"></span>
+            </a>
+          </h6>
+          <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                Cash-Back
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Dashboard</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+              <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+              <span data-feather="calendar"></span>
+
+            </button>
+          </div>
+        </div>
+
+        <canvas class="my-4 w-100" id="curve_chart" width="900" height="380"></canvas>
+        <canvas class="my-4 w-100" id="table_div" width="900" height="380"></canvas>
+
+        <h2>All Metrics by Day</h2>
+        <div class="table-responsive" id="table_all">
+
+        </div>
+      </main>
     </div>
   </div>
-  <!--/.container-fluid-->
+  <script type="text/javascript">
+    /* Custom class definitions wrap business
+       logic around google.visualization API */
+    class Chart {
+      // private fields
+      #props;
+      #chart;
+      #table;
+      #view;
+      #summary;
+
+      constructor(props) {
+        this.#props = props;
+        this.#table = props.table;
+        this.#view = new google.visualization.DataView(this.#table);
+        this.#chart = new google.visualization[props.chartType](
+          document.getElementById(props.elementId)
+        );
+        this.draw();
+      }
+
+      /* public methods */
+      draw(filterArr) {
+        if (filterArr && filterArr.length) {
+          this.filterAndDraw(filterArr);
+        } else {
+          this.#chart.draw(
+            this.#view,
+            this.#props.options
+          );
+        }
+      }
+
+      set summaryChart(summaryChart) {
+        this.#summary = summaryChart;
+      }
+
+      get summaryChart() {
+        return this.#summary;
+      }
+
+      get data() {
+        return this.#props.data;
+      }
+
+      get headers() {
+        return this.#props.headers;
+      }
+
+      get table() {
+        return this.#table;
+      }
+
+      filterAndDraw(newFilter) {
+        this.#view = new google.visualization.DataView(this.#table);
+        this.#view.setRows(newFilter);
+        if (this.#summary) updateSumTable(this, newFilter);
+        this.draw();
+      }
+
+      filterByDate(minDateObj, maxDateObj) {
+        const minTime = minDateObj.getTime();
+        const maxTime = maxDateObj.getTime();
+        const filterResults = [];
+        this.#props.data.forEach((row, index) => {
+          //console.log('min: ', minTime, '\nthis: ', row[0].getTime(), '\nmax: ', maxTime)
+          if (minTime < row[0].getTime() && maxTime > row[0].getTime()) {
+            filterResults.push(index);
+          }
+        })
+        this.filterAndDraw(filterResults);
+      }
+
+      set options(newOptions) {
+        for (const [key, value] of Object.entries(newOptions)) {
+          this.#props.options[key] = value;
+        }
+      }
+
+      static injest(array) {
+        const headers = array.shift();
+
+        array.forEach(el => {
+          var year = parseInt(el[0].split(',')[0]);
+          var month = parseInt(el[0].split(',')[1]);
+          var day = parseInt(el[0].split(',')[2]);
+          el[0] = new Date(year, month, day);
+        });
+
+        array.sort((a, b) => {
+          a[0].getTime() - b[0].getTime();
+        });
+
+        headers.forEach((header, col) => {
+          header = {
+            type: col == 0 ? 'date' : 'number', // first col is date
+            value: header
+          };
+        });
+        return { headers, array }; // returns js arrays, to be used
+        // for the 'new DataTable()' call
+        // within the Chart class constructor
+      }
+    }
+
+    // from here down is an example implementation of the above class 
+    const initializeData = () => {
+      return Chart.injest(%%=v(@data)=%%);
+    }
+
+    const createTable = (cleanData) => {
+      let headers = cleanData.headers;
+      let data = cleanData.array;
+
+      let options = {
+        title: 'General Campaign Metrics',
+        legend: { position: 'bottom' }
+      }
+
+      let table = new google.visualization.DataTable();
+
+      for (var i in headers) {
+        if (i == 0) {
+          table.addColumn('date', headers[i]);
+        } else {
+          table.addColumn('number', headers[i]);
+        }
+      }
+
+      data.sort((a, b) => a[0].getTime() - b[0].getTime());
+      table.addRows(data);
+
+      return {
+        data: data,
+        headers: headers,
+        table: table,
+        options: options,
+        elementId: 'line_chart',
+        chartType: 'LineChart'
+      }
+    }
+
+    const createChart = (props) => {
+      return new Chart(props);
+    }
+
+    const createChartListeners = (chart) => {
+      $('#datePickerSubmit').click(function () {
+        let minDate = new Date($('#startDate').val());
+        let maxDate = new Date($('#endDate').val());
+        chart.filterByDate(minDate, maxDate);
+      })
+      return chart;
+    }
+
+    const onError = (err) => {
+      console.log(err);
+    }
+
+    function createSumTable(chart) {
+      let dataSum = [['Metric', 'Total over Data Range']];
+      chart.headers.shift();
+      chart.headers.forEach((header, colIndex) => {
+        colIndex++;
+        chart.data.forEach((row, rowIndex) => {
+          if (!dataSum[colIndex] && colIndex) {
+            dataSum[colIndex] = [header, row[colIndex] || 0];
+          } else {
+            let currVal = dataSum[colIndex][1] || 0;
+            let nextVal = row[colIndex] || 0;
+            dataSum[colIndex][1] = currVal + nextVal;
+          }
+        })
+      })
+      console.log(dataSum)
+      // dataSum.forEach((col, index) => {
+      //     if (3 < index < 7) {
+      //         col = '$' + (col / chart.data.length);
+      //     }
+      // })
+
+      var sumTableArray = dataSum;
+      var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
+      if (!sumTable) var sumTable = new google.visualization.Table(document.getElementById('table_div'));
+
+      sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
+      chart.summaryChart = sumTable;
+      return sumTable;
+    }
+
+    function updateSumTable(chart, filter) {
+      let dataSum = [['Metric', 'Total over Data Range']];
+      chart.headers.shift();
+      chart.headers.forEach((header, colIndex) => {
+        colIndex++;
+        chart.data.forEach((row, rowIndex) => {
+          if (!dataSum[colIndex] && colIndex) {
+            dataSum[colIndex] = [header, row[colIndex] || 0];
+          } else {
+            if (filter.includes(rowIndex)) {
+              let currVal = dataSum[colIndex][1] || 0;
+              let nextVal = row[colIndex] || 0;
+              dataSum[colIndex][1] = currVal + nextVal;
+            }
+          }
+        })
+      })
+      console.log(dataSum)
+      // dataSum.forEach((col, index) => {
+      //     if (3 < index < 7) {
+      //         col = '$' + (col / chart.data.length);
+      //     }
+      // })
+
+      var sumTableArray = dataSum;
+      var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
+
+      chart.summaryChart.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
+      return chart.summaryChart;
+    }
+
+    google.charts.load('current', { 'packages': ['corechart', 'line', 'table'] })
+      .then(initializeData)
+      .then(createTable)
+      .then(createChart)
+      .then(createChartListeners)
+      .then(createSumTable)
+      .catch(onError)
+
+
+  </script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -196,7 +438,8 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+  <script src="dashboard.js"></script>
 </body>
 
 </html>
