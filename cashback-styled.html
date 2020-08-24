@@ -293,7 +293,7 @@
                 }
             })
 
-            var sumTableArray = [headers, dataSum];
+            var sumTableArray = [chart.headers, dataSum];
             var sumTable = new google.visualization.Table(document.getElementById('table_div'));
 
             sumTable.draw(sumTableArray, {showRowNumber: false, width: '100%', height: '100%'})
