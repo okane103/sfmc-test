@@ -261,17 +261,25 @@
         }
 
         const createSumTable = (chart) => {
-            let dataSum = [];
-            chart.data.forEach((row, rowIndex) => {
-                row.shift();
-                chart.headers.forEach((header, colIndex) => {
-                    if (colIndex == 0) {
-                        dataSum[0] = ['Metric', 'Total over Date Range'];
+            let dataSum = [['Metric', 'Total over Data Range']];
+            chart.headers.shift();
+            chart.headers.forEach((header, colIndex) => {
+                colIndex++;
+                chart.data.forEach((row, rowIndex) => {
+                    if (!dataSum[colIndex] && colIndex) {
+                        dataSum[colIndex] = [header, row[colIndex] || 0];
                     } else {
-                        dataSum[colIndex][0] = header;
-                        dataSum[colIndex][1] = dataSum[colIndex][1] ? dataSum[colIndex][1] + row[colIndex] || 0 : row[colIndex] || 0;
+                        let currVal = dataSum[colIndex][1] || 0;
+                        let nextVal = row[colIndex] || 0;
+                        dataSum[colIndex][1] = currVal + nextVal;
                     }
                 })
+                if (colIndex == 0) {
+                    dataSum[0] = ['Metric', 'Total over Date Range'];
+                } else {
+                    dataSum[colIndex] = [header];
+                    dataSum[colIndex][1] = dataSum[colIndex][1] ? dataSum[colIndex][1] + row[colIndex] || 0 : row[colIndex] || 0;
+                }
             })
             dataSum.forEach((col, index) => {
                 if (3 < index < 7) {
