@@ -167,7 +167,7 @@
             filterAndDraw(newFilter) {
                 this.#view = new google.visualization.DataView(this.#table);
                 this.#view.setRows(newFilter);
-                updateSumTable(this, newFilter);
+                if (this.#summary) updateSumTable(this, newFilter);
                 this.draw();
             }
 
