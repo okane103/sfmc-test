@@ -267,23 +267,25 @@
                 row.shift();
                 chart.headers.forEach((header, colIndex) => {
                     if (colIndex == 0) {
-                        dataSum[colIndex] = ' ';
+                        dataSum[colIndex] = ['Metric', 'Total over Date Range'];
                     } else {
-                        dataSum[colIndex] = dataSum[colIndex] ? dataSum[colIndex] + row[colIndex] || 0 : row[colIndex] || 0;
+                        if (dataSum[colIndex]) {
+                            dataSum[colIndex] = [header, dataSum[colIndex][1] ? dataSum[colIndex][1] + row[colIndex] || 0 : row[colIndex] || 0];
+                        }
                     }
                 })
             })
             dataSum.forEach((col, index) => {
                 if (3 < index < 7) {
-                    col = col/chart.data.length;
+                    col = col / chart.data.length;
                 }
             })
 
             var sumTableArray = [chart.headers, dataSum];
             var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
             var sumTable = new google.visualization.Table(document.getElementById('table_div'));
-            
-            sumTable.draw(sumDataTable, {sumDataTable: false, width: '100%', height: '100%'})
+
+            sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
             return sumTable;
         }
 
@@ -302,15 +304,15 @@
             })
             dataSum.forEach((col, index) => {
                 if (3 < index < 7) {
-                    col = col/chart.data.length;
+                    col = col / chart.data.length;
                 }
             })
 
             var sumTableArray = [chart.headers, dataSum];
             var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
             var sumTable = new google.visualization.Table(document.getElementById('table_div'));
-            
-            sumTable.draw(sumDataTable, {sumDataTable: false, width: '100%', height: '100%'})
+
+            sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
             return sumTable;
         }
 
