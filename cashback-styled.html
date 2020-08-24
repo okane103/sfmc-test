@@ -274,16 +274,11 @@
                         dataSum[colIndex][1] = currVal + nextVal;
                     }
                 })
-                if (colIndex == 0) {
-                    dataSum[0] = ['Metric', 'Total over Date Range'];
-                } else {
-                    dataSum[colIndex] = [header];
-                    dataSum[colIndex][1] = dataSum[colIndex][1] ? dataSum[colIndex][1] + row[colIndex] || 0 : row[colIndex] || 0;
-                }
             })
+            console.log(dataSum)
             dataSum.forEach((col, index) => {
                 if (3 < index < 7) {
-                    col = col / chart.data.length;
+                    col = '$' + (col / chart.data.length);
                 }
             })
 
