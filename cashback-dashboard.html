@@ -122,7 +122,7 @@
     }
   </style>
   <!-- Custom styles for this template -->
-  <link href="https://cloud.emails.skechers.com/dashboard_style.css" rel="stylesheet">
+  <link href="https://cloud.emails.skechers.com/dashboard_style" rel="stylesheet">
 </head>
 
 <body>
@@ -185,8 +185,16 @@
           </div>
         </div>
 
-        <canvas class="my-4 w-100" id="line_chart" width="900" height="380"></canvas>
-        <canvas class="my-4 w-100" id="table_div" width="900" height="380"></canvas>
+        <canvas class="my-4 w-100" width="900" height="380">
+          <div id="line_chart">
+
+          </div>
+        </canvas>
+        <canvas class="my-4 w-100" width="900" height="380">
+          <div id="tabe_div"> 
+
+          </div>
+        </canvas>
 
         <h2>All Metrics by Day</h2>
         <div class="table-responsive" id="table_all">
