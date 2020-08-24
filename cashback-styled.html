@@ -88,7 +88,7 @@
 </head>
 
 <body>
-    <h1>Cashback campaign 9:32am</h1>
+    <h1>Cashback campaign 9:49am</h1>
     <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
     <label for="birthday">End Date:</label>
@@ -268,7 +268,7 @@
                     if (colIndex == 0) {
                         dataSum[colIndex] = ' ';
                     } else {
-                        dataSum[colIndex] = dataSum[colIndex] ? dataSum[colIndex] + row[colIndex] || 0 : row[ColIndex];
+                        dataSum[colIndex] = dataSum[colIndex] ? dataSum[colIndex] + row[colIndex] || 0 : row[ColIndex] || 0;
                     }
                 })
             })
