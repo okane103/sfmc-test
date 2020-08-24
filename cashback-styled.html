@@ -238,20 +238,21 @@
         const createChartListeners = (chart) => {
             $('#datePickerSubmit').click(function() {
                 let minDate = new Date($('#startDate').val());
-                let maxDate = new Date($('#maxDate').val());
+                let maxDate = new Date($('#endDate').val());
                 chart.filterByDate(minDate, maxDate);
             })
             return chart;
-        }
-
-        // shortcut way of doing things for now
-        const displayTotals = () => {
-            
         }
         
         const onError = (err) => {
             console.log(err);
         }
+
+        // shortcut way of doing things for now
+        const addOtherComponents = chart => {
+            showSumPanel(chart.data);
+            showCodesPanel(); 
+        }   
 
         google.charts.load('current', { 'packages': ['corechart', 'line'] })
             .then(initializeData)
