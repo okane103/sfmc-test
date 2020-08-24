@@ -262,7 +262,34 @@
 
         const createSumTable = (chart) => {
             let dataSum = [];
-            headers.shift();
+            chart.headers.shift();
+            chart.data.forEach((row, rowIndex) => {
+                row.shift();
+                chart.headers.forEach((header, colIndex) => {
+                    if (colIndex == 0) {
+                        dataSum[colIndex] = ' ';
+                    } else {
+                        dataSum[colIndex] = dataSum[colIndex] ? dataSum[colIndex] + row[colIndex] || 0 : row[colIndex] || 0;
+                    }
+                })
+            })
+            dataSum.forEach((col, index) => {
+                if (3 < index < 7) {
+                    col = col/chart.data.length;
+                }
+            })
+
+            var sumTableArray = [chart.headers, dataSum];
+            var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
+            var sumTable = new google.visualization.Table(document.getElementById('table_div'));
+            
+            sumTable.draw(sumDataTable, {sumDataTable: false, width: '100%', height: '100%'})
+            return sumTable;
+        }
+
+        const createSumTable2 = (chart) => {
+            let dataSum = [];
+            chart.headers.shift();
             chart.data.forEach((row, rowIndex) => {
                 row.shift();
                 chart.headers.forEach((header, colIndex) => {
