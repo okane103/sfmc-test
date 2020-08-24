@@ -140,13 +140,16 @@
                     this.#chart.draw(
                         this.#view,
                         this.#props.options                        
-                    );
-                    if (this.#summary) this.#summary.draw(this.#view, { sumDataTable: false, width: '100%', height: '100%' });
+                    );        
                 }
             }
 
             set summaryChart(summaryChart) {
                 this.#summary = summaryChart;
+            }
+
+            get summaryChart() {
+                return this.#summary = summaryChart;
             }
 
             get data() {
@@ -164,6 +167,7 @@
             filterAndDraw(newFilter) {
                 this.#view = new google.visualization.DataView(this.#table);
                 this.#view.setRows(newFilter);
+                updateSumTable(this.#summary, filter);
                 this.draw();
             }
 
@@ -297,9 +301,35 @@
             return sumTable;
         }
 
-        function updateSumTable(view) {
-            var sumTable = new google.visualization.Table(document.getElementById('table_div'));
-            sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' });
+        function updateSumTable(chart, filter) {
+            let dataSum = [['Metric', 'Total over Data Range']];
+            chart.headers.shift();
+            chart.headers.forEach((header, colIndex) => {
+                colIndex++;
+                chart.data.forEach((row, rowIndex) => {                    
+                    if (!dataSum[colIndex] && colIndex) {
+                        dataSum[colIndex] = [header, row[colIndex] || 0];
+                    } else {
+                        if (filter.includes(rowIndex)) {
+                            let currVal = dataSum[colIndex][1] || 0;
+                            let nextVal = row[colIndex] || 0;
+                            dataSum[colIndex][1] = currVal + nextVal;   
+                        }
+                    }
+                })
+            })
+            console.log(dataSum)
+            dataSum.forEach((col, index) => {
+                if (3 < index < 7) {
+                    col = '$' + (col / chart.data.length);
+                }
+            })
+
+            var sumTableArray = dataSum;
+            var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
+
+            chart.summaryChart.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
+            return chart.summaryChart;
         }
 
         google.charts.load('current', { 'packages': ['corechart', 'line', 'table'] })
