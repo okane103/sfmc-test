@@ -279,7 +279,11 @@
 
             chart.data.forEach((row, rowIndex) => {
                 chart.headers.forEach((header, colIndex) => {
-                    dataSum[colIndex] += row[colIndex];
+                    if (colIndex == 0) {
+                        continue;
+                    } else {
+                        dataSum[colIndex] += row[colIndex] || 0;
+                    }
                 })
             })
             dataSum.forEach((col, index) => {
