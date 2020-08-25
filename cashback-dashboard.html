@@ -292,6 +292,17 @@
         this.filterAndDraw(filterResults);
       }
 
+      generateSummary() {
+         summaryTable = [];
+         chart.#props.headers.forEach(header, index => {
+           if (index > 0) {
+             if (!summaryTable[index-1]) {
+               summaryTable[index-1] = [header]
+            };
+           }
+        })
+      }
+
       set options(newOptions) {
         for (const [key, value] of Object.entries(newOptions)) {
           this.#props.options[key] = value;

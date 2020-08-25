@@ -89,9 +89,9 @@
 
 <body>
     <h1>Cashback Reporting</h1>
-    <label for="date-range">Start Date:</label>
+    <label for="birthday">Start Date:</label>
     <input type="date" id="startDate" name="startDate" value="2020-06-25">
-    <label for="date-range">End Date:</label>
+    <label for="birthday">End Date:</label>
     <input type="date" id="endDate" name="endDate" value="2020-07-25">
     <button type="button" id="datePickerSubmit">
         GO
@@ -112,12 +112,15 @@
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script type="text/javascript">
+        /* Custom class definitions wrap business
+           logic around google.visualization API */
         class Chart {
-            props;
-            chart;
-            table;
-            view;
-            summary;
+            // private fields
+            #props;
+            #chart;
+            #table;
+            #view;
+            #summary;
 
             constructor(props) {
                 this.#props = props;
@@ -319,7 +322,7 @@
             // dataSum.forEach((col, index) => {
             //     if (3 < index < 7) {
             //         col = '$' + (col / chart.data.length);
-            //     } 
+            //     }
             // })
 
             var sumTableArray = dataSum;
