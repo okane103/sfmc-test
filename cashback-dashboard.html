@@ -438,14 +438,14 @@
       // })
 
       var sumTableArray = dataSum;
-      var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
+      //var sumDataTable = new google.visualization.arrayToDataTable(sumTableArray);
+      var sumDataTable = new google.visualization.arrayToDataTable(%%=v(@sumTable)=%%); //hardcoded version straight from AMPScript
+      
       if (!sumTable) var sumTable = new google.visualization.Table(document.getElementById('table_div'));
 
       sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
-      chart.summaryChart = sumTable;
-      console.log(%%=v(@sumTable)=%%); //hardcoded version straight from AMPScript
-      return %%=v(@sumTable)=%%;
-      //return sumTable;
+      chart.summaryChart = sumTable;      
+      return sumTable;
     }
 
     function updateSumTable(chart, filter) {
