@@ -5,6 +5,7 @@
 
     /* ==== configuration ==== */
     var recordsDE = DataExtension.Init("7E7046D5-6206-4C71-A52A-414BFC0442B1");
+    var summaryDE = DataExtension.Init("4BFD6AF6-9A14-44E6-995D-CA1E59A59A3E");
 
     var dateField = 'Date';                  //the order of properties in the objects do not follow the order
     //of fields in SFMC, so the date field needs to be hardcoded to
@@ -17,6 +18,10 @@
     var headers = [dateField];                    //forces date field to be first header
     var isFirstRecord = true;
     var stringData = '';
+
+
+      var summaryRows = summaryDE.Rows.Retrieve();
+      var sumTable = summarizeRows(summaryRows);
 
     //Converting data from an array of objects, to an array of arrays, starting with the headers
     for (var record in records) {
@@ -58,7 +63,7 @@
 
     stringData = Stringify(finalData);
     Variable.SetValue('@data', stringData);  //passing value to AMPscript to output into frontend JS
-
+    Variable.SetValue('@sumTable', summary)
   } catch (e) {
     Write(Stringify(e));
   }
@@ -70,6 +75,24 @@
     var year = date.getFullYear();
 
     return year + ',' + month + ',' + day;
+  }
+
+  function summarizeRows(rows) {
+    let row = row[0]
+    var summaryTable = [
+      ['Codes_Earned', row['Codes_Earned']],
+      ['Earned_NewCustomers', row['Earned_NewCustomers']],
+      ['Earned_ReturningCustomers', row['Earned_ReturningCustomers']],
+      ['Customers_Redeemed', row['Customers_Redeemed']],
+      ['Redeemed_NewCustomers', row['Redeemed_NewCustomers']],
+      ['Redeemed_ReturningCustomers', row['Redeemed_ReturningCustomers']],
+      ['Redemptions_Transactions', row['Redemptions_Transactions']],
+      ['Redemptions_AOV', row['Redemptions_AOV']],
+      ['Redemptions_AUR', row['Redemptions_AUR']],
+      ['Redemptions_UPT', row['Redemptions_UPT']],
+      ['Redemptions_UnitsSold', row['Redemptions_UnitsSold']]
+    ];
+    return summaryTable;
   }
 </script>
 <!-- /Server Side -->
@@ -418,6 +441,7 @@
 
       sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
       chart.summaryChart = sumTable;
+      console.log(%%=v(@sumTable)=%%)
       return sumTable;
     }
 
