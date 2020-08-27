@@ -443,8 +443,9 @@
 
       sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
       chart.summaryChart = sumTable;
-      console.log(%%=v(@sumTable)=%%);
-      return sumTable;
+      console.log(%%=v(@sumTable)=%%); //hardcoded version straight from AMPScript
+      return %%=v(@sumTable)=%%;
+      //return sumTable;
     }
 
     function updateSumTable(chart, filter) {
