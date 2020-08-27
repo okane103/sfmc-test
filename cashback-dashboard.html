@@ -20,8 +20,8 @@
     var stringData = '';
 
 
-      var summaryRows = summaryDE.Rows.Retrieve();
-      var sumTable = summarizeRows(summaryRows);
+    var summaryRows = summaryDE.Rows.Retrieve();
+    var sumTable = summarizeRows(summaryRows);
 
     //Converting data from an array of objects, to an array of arrays, starting with the headers
     for (var record in records) {
@@ -63,7 +63,7 @@
 
     stringData = Stringify(finalData);
     Variable.SetValue('@data', stringData);  //passing value to AMPscript to output into frontend JS
-    Variable.SetValue('@sumTable', summary)
+    Variable.SetValue('@sumTable', sumTable);
   } catch (e) {
     Write(Stringify(e));
   }
