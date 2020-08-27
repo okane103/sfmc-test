@@ -10,7 +10,7 @@
     //of fields in SFMC, so the date field needs to be hardcoded to
     //force it to be the first header/column
 
-    var excludedFields = ['SSJS_Lookup'];    //any fields that should be excluded from the final data
+    var excludedFields = ['SSJS_Lookup', 'Customers_wQualifyingTransactions'];    //any fields that should be excluded from the final data
 
     var records = recordsDE.Rows.Retrieve();
     var finalData = [];
