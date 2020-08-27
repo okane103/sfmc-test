@@ -78,7 +78,7 @@
   }
 
   function summarizeRows(rows) {
-    let row = rows[0]
+    var row = rows[0]
     var summaryTable = [
       ['Codes_Earned', row['Codes_Earned']],
       ['Earned_NewCustomers', row['Earned_NewCustomers']],
@@ -441,7 +441,7 @@
 
       sumTable.draw(sumDataTable, { sumDataTable: false, width: '100%', height: '100%' })
       chart.summaryChart = sumTable;
-      console.log(%%=v(@sumTable)=%%)
+      console.log(%%=v(@sumTable)=%%);
       return sumTable;
     }
 
