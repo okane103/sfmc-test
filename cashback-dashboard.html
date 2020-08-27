@@ -91,8 +91,8 @@
       ['Redeemed_ReturningCustomers', row['Redeemed_ReturningCustomers']],
       ['Redemptions_Transactions', row['Redemptions_Transactions']],
       ['Redemptions_UnitsSold', row['Redemptions_UnitsSold']],
-      ['Redemptions_AOV', row['$'+'Redemptions_AOV']],
-      ['Redemptions_AUR', row['$'+'Redemptions_AUR']],
+      ['Redemptions_AOV', '$'+row['Redemptions_AOV']],
+      ['Redemptions_AUR', '$'+row['Redemptions_AUR']],
       ['Redemptions_UPT', row['Redemptions_UPT']]
     ];
     return summaryTable;
@@ -174,7 +174,7 @@
             <li class="nav-item">
               <a class="nav-link active" href="#">
                 <span data-feather="home"></span>
-                Campaign Tools<span class="sr-only">(current)</span>
+                Campaign Tools
               </a>
             </li>
           </ul>
@@ -222,19 +222,15 @@
             <label for="birthday">Start Date:</label>
             <input type="date" id="startDate" name="startDate" value="2020-06-25">
             <label for="birthday">End Date:</label>
-            <input type="date" id="endDate" name="endDate" value="2020-07-25">
+            <input type="date" id="endDate" name="endDate" value="2020-08-05">
             <button type="button" id="datePickerSubmit">
                 GO
             </button>
           </div>
         </div>
-
-        <h2>Metrics Summary</h2>
         <div id="table_div" class="my-4 w-100" width="900" height="380">
         </div>
-
-
-        <h2>All Metrics by Day</h2>
+        <h2>Metrics by Day</h2>
         <div id="line_chart" class="my-4 w-100" width="900" height="380">
         </div>
         <div id="table_all">
