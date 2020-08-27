@@ -18,6 +18,7 @@
     var headers = [dateField];                    //forces date field to be first header
     var isFirstRecord = true;
     var stringData = '';
+    var sumStringData = '';
 
 
     var summaryRows = summaryDE.Rows.Retrieve();
@@ -62,8 +63,9 @@
     }
 
     stringData = Stringify(finalData);
+    sumStringData = Stringify(sumTable);
     Variable.SetValue('@data', stringData);  //passing value to AMPscript to output into frontend JS
-    Variable.SetValue('@sumTable', sumTable);
+    Variable.SetValue('@sumTable', sumStringData);
   } catch (e) {
     Write(Stringify(e));
   }
