@@ -82,6 +82,7 @@
   function summarizeRows(rows) {
     var row = rows[0]
     var summaryTable = [
+      ['Metric', 'Total over selected date range']
       ['Codes_Earned', row['Codes_Earned']],
       ['Earned_NewCustomers', row['Earned_NewCustomers']],
       ['Earned_ReturningCustomers', row['Earned_ReturningCustomers']],
@@ -89,10 +90,10 @@
       ['Redeemed_NewCustomers', row['Redeemed_NewCustomers']],
       ['Redeemed_ReturningCustomers', row['Redeemed_ReturningCustomers']],
       ['Redemptions_Transactions', row['Redemptions_Transactions']],
-      ['Redemptions_AOV', row['Redemptions_AOV']],
-      ['Redemptions_AUR', row['Redemptions_AUR']],
-      ['Redemptions_UPT', row['Redemptions_UPT']],
-      ['Redemptions_UnitsSold', row['Redemptions_UnitsSold']]
+      ['Redemptions_UnitsSold', row['Redemptions_UnitsSold']],
+      ['Redemptions_AOV', row['$'+'Redemptions_AOV']],
+      ['Redemptions_AUR', row['$'+'Redemptions_AUR']],
+      ['Redemptions_UPT', row['Redemptions_UPT']]
     ];
     return summaryTable;
   }
