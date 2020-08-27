@@ -224,17 +224,17 @@
        logic around google.visualization API */
     class Chart {
       // private fields
-      #props;
-      #chart;
-      #table;
-      #view;
-      #summary;
+      props;
+      chart;
+      table;
+      view;
+      summary;
 
       constructor(props) {
-        this.#props = props;
-        this.#table = props.table;
-        this.#view = new google.visualization.DataView(this.#table);
-        this.#chart = new google.visualization[props.chartType](
+        this.props = props;
+        this.table = props.table;
+        this.view = new google.visualization.DataView(this.table);
+        this.chart = new google.visualization[props.chartType](
           document.getElementById(props.elementId)
         );
         this.draw();
@@ -245,37 +245,37 @@
         if (filterArr && filterArr.length) {
           this.filterAndDraw(filterArr);
         } else {
-          this.#chart.draw(
-            this.#view,
-            this.#props.options
+          this.chart.draw(
+            this.view,
+            this.props.options
           );
         }
       }
 
       set summaryChart(summaryChart) {
-        this.#summary = summaryChart;
+        this.summary = summaryChart;
       }
 
       get summaryChart() {
-        return this.#summary;
+        return this.summary;
       }
 
       get data() {
-        return this.#props.data;
+        return this.props.data;
       }
 
       get headers() {
-        return this.#props.headers;
+        return this.props.headers;
       }
 
       get table() {
-        return this.#table;
+        return this.table;
       }
 
       filterAndDraw(newFilter) {
-        this.#view = new google.visualization.DataView(this.#table);
-        this.#view.setRows(newFilter);
-        if (this.#summary) updateSumTable(this, newFilter);
+        this.view = new google.visualization.DataView(this.table);
+        this.view.setRows(newFilter);
+        if (this.summary) updateSumTable(this, newFilter);
         this.draw();
       }
 
@@ -283,7 +283,7 @@
         const minTime = minDateObj.getTime();
         const maxTime = maxDateObj.getTime();
         const filterResults = [];
-        this.#props.data.forEach((row, index) => {
+        this.props.data.forEach((row, index) => {
           //console.log('min: ', minTime, '\nthis: ', row[0].getTime(), '\nmax: ', maxTime)
           if (minTime < row[0].getTime() && maxTime > row[0].getTime()) {
             filterResults.push(index);
@@ -294,7 +294,7 @@
 
       generateSummary() {
          summaryTable = [];
-         chart.#props.headers.forEach(header, index => {
+         chart.props.headers.forEach(header, index => {
            if (index > 0) {
              if (!summaryTable[index-1]) {
                summaryTable[index-1] = [header]
@@ -305,7 +305,7 @@
 
       set options(newOptions) {
         for (const [key, value] of Object.entries(newOptions)) {
-          this.#props.options[key] = value;
+          this.props.options[key] = value;
         }
       }
 
