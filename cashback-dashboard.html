@@ -172,9 +172,9 @@
         <div class="sidebar-sticky pt-3">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" href="#">
+              <a class="nav-link" href="#">
                 <span data-feather="home"></span>
-                Campaign Tools
+                SFMC Campaign Tools
               </a>
             </li>
           </ul>
@@ -207,7 +207,7 @@
           class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">Cash Back</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="form-check form-check-inline">
+            <!-- <div class="form-check form-check-inline">
               <input class="form-check-input" type="checkbox" id="earned" value="option1">
               <label class="form-check-label" for="inlineCheckbox1">Earned</label>
             </div>
@@ -225,12 +225,14 @@
             <input type="date" id="endDate" name="endDate" value="2020-08-05">
             <button type="button" id="datePickerSubmit">
                 GO
-            </button>
+            </button> -->
+            <button type="button" class="btn btn-primary btn-sm">Download CSV</button>
           </div>
         </div>
         <div id="table_div" class="my-4 w-100" width="900" height="380">
         </div>
         <h2>Metrics by Day</h2>
+
         <div id="line_chart" class="my-4 w-100" width="900" height="380">
         </div>
         <div id="table_all">
@@ -454,7 +456,7 @@
     }
 
     function updateSumTable(chart, filter) {
-      let dataSum = [['Metric', 'Total over Data Range']];
+      let dataSum = [['Metric', 'Total over Campaign Run']];
       chart.headers.shift();
       chart.headers.forEach((header, colIndex) => {
         colIndex++;
